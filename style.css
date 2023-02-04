@@ -38,6 +38,10 @@ button {
   font-weight: bolder;
 }
 
+#progress-container {
+  padding-bottom: 1em;
+}
+
 #progress-bar {
   background-color: #88999C;
   height: 3px;
@@ -46,9 +50,10 @@ button {
 }
 
 #current-progress {
+  --progress: 0%;
   background-color: white;
   height: inherit;
-  width: 50%;
+  width: var(--progress);
   border-radius: inherit;
 }
 
@@ -57,7 +62,6 @@ button {
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  margin-top: 2em;
 }
 
 .button {
