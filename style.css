@@ -18,7 +18,7 @@ button {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin: 1em 0 4em 0;
+  margin: 4em 0 4em 0;
 }
 
 #cover {
@@ -39,7 +39,6 @@ button {
 }
 
 #progress-container {
-  padding-bottom: 1em;
   cursor: pointer;
 }
 
@@ -56,6 +55,15 @@ button {
   height: inherit;
   width: var(--progress);
   border-radius: inherit;
+}
+
+#time-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-size: smaller;
+  margin-top: 0.5em;
 }
 
 #button-container {

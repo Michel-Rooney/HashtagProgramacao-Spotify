@@ -33,9 +33,10 @@ function nextSong(){
     playSong();
 }
 
-function updateProgressBar(){
+function updateProgress(){
     const barwidth = (song.currentTime/song.duration)*100;
     currentProgress.style.setProperty('--progress', `${barwidth}%`);
+    songTime.innerHTML = toHHMMSS(song.currentTime);
 }
 
 function jumpTo(event){
@@ -69,6 +70,42 @@ function shuffleButtonClicked(){
     }
 }
 
+function repeatButtonClicked(){
+    if (repeatOn === false) {
+        repeatOn = true;
+        repeatButton.classList.add('button-active');
+    } else {
+        repeatOn = false;
+        repeatButton.classList.remove('button-active');
+    }
+}
+
+function nextOrRepeat(){
+    if (repeatOn === false) {
+        nextSong();
+    } else {
+        playSong();
+    }
+}
+
+function toHHMMSS(originalNumber){
+    let hours = Math.floor(originalNumber / 3600);
+    let min = Math.floor((originalNumber - hours * 3600) / 60);
+    let secs = Math.floor(originalNumber - hours * 3600 - min * 60);
+
+    if (hours > 0) {
+        return `${hours.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    } else {
+        return `${min.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+    
+}
+
+function updateTotalTime(){
+    totalTime.innerHTML = toHHMMSS(song.duration);
+}
+
+
 const songName = document.getElementById('song-name');
 const bandName = document.getElementById('band-name');
 const song = document.getElementById('audio');
@@ -79,21 +116,31 @@ const previous = document.getElementById('previous');
 const currentProgress = document.getElementById('current-progress');
 const progressContainer = document.getElementById('progress-container');
 const spirit = {songName: 'S.P.I.R.I.T.', artist: 'Bring Me The Horizon',file: 's.p.i.r.i.t'}
-const crawling = {songName: 'Crawling',artist: 'Linkin Park',file: 'crawling'}
-const enchanted = {songName: 'Enchanted',artist: 'Taylor Swift',file: 'enchanted'}
+const crawling = {songName: 'Crawling', artist: 'Linkin Park', file: 'crawling'}
+const enchanted = {songName: 'Enchanted', artist: 'Taylor Swift', file: 'enchanted'}
 const originalPlaylist = [spirit, crawling, enchanted];
 const shuffleButton = document.getElementById('shuffle');
+const repeatButton = document.getElementById('repeat');
+const songTime = document.getElementById('song-time');
+const totalTime = document.getElementById('total-time');
+
 
 let isPlaying = false;
 let isShuffled = false;
+let repeatOn = false;
 let sortedPlaylist = [...originalPlaylist];
 let index = 0;
 
-initializeSong();
 
 play.addEventListener('click', playPauseDecider);
 previous.addEventListener('click', previousSong);
 next.addEventListener('click', nextSong);
-song.addEventListener('timeupdate', updateProgressBar);
+song.addEventListener('timeupdate', updateProgress);
+song.addEventListener('ended', nextOrRepeat);
+song.addEventListener('loadedmetadata', updateTotalTime);
 progressContainer.addEventListener('click', jumpTo);
 shuffleButton.addEventListener('click', shuffleButtonClicked);
+repeatButton.addEventListener('click', repeatButtonClicked);
+
+
+initializeSong();
